@@ -1,0 +1,22 @@
+{
+  "name": "social-network-api",
+  "version": "1.0.0",
+  "description": "Social Network API Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "watch": "nodemon server.js"
+  },
+  "author": "Renee Rodriguez",
+  "license": "MIT",
+  "dependencies": {
+    "dayjs": "^1.11.12",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
