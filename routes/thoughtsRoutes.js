@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
       thoughtResponseFormatter(thought)
     );
 
-    res.status(200).json(thoughts);
+    res.status(200).json(thoughtsResponse);
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const thought = await Thought.findById(req.params.id)
-      .populate('users')
+      .populate('username', 'username')
       .populate('reactions')
       .exec();
 
@@ -54,6 +54,43 @@ router.post('/', async (req, res) => {
     await user.save();
 
     res.status(200).json(thoughtResponse);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.body.userId);
+    const body = {
+      thoughtText: req.body.thoughtText,
+      username: user._id,
+    };
+
+    const thought = await Thought.findByIdAndUpdate(req.params.id, body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!thought) {
+      res.status(404).json({ message: 'No thought found with this id!' });
+      return;
+    }
+    const thoughtResponse = thoughtResponseFormatter(
+      await thought.populate('username', 'username')
+    );
+    res.status(200).json(thoughtResponse);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    await Thought.findByIdAndDelete(req.params.id);
+    res.status(204).send();
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
