@@ -1,6 +1,5 @@
 const dayjs = require('dayjs');
 const advancedFormat = require('dayjs/plugin/advancedFormat');
-const { User } = require('../models');
 const DATE_FORMAT = 'MMM Do, YYYY at HH:mm A';
 
 dayjs.extend(advancedFormat);

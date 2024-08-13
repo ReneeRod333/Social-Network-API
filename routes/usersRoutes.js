@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../models');
+const { User, Thought } = require('../models');
 const { userResponseFormatter } = require('../utils/helpers');
 
 router.get('/', async (req, res) => {
@@ -59,13 +59,10 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) {
-      res.status(404).json({ message: 'No user found with this id!' });
-      return;
-    }
-    await Thought.deleteMany({ username: user._id });
-    res.status(200).json(user);
+    await User.findByIdAndDelete(req.params.id);
+
+    await Thought.deleteMany({ username: req.params.id });
+    res.status(204).send();
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
